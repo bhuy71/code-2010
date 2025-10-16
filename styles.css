@@ -1,0 +1,781 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    overflow: hidden;
+    background: #ffe8f0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+.screen.active {
+    display: flex !important;
+    opacity: 1;
+}
+
+/* ===== SCREEN 1: BUNNY ===== */
+#screen1 {
+    background: #ffe8f0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+.main-title {
+    font-family: 'Pacifico', cursive;
+    font-size: 64px;
+    font-weight: 700;
+    font-style: italic;
+    color: #ff6b9d;
+    text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.3);
+    animation: titleFloat 3s ease-in-out infinite;
+}
+
+.bunny-card {
+    background: white;
+    padding: 50px;
+    border-radius: 35px;
+    box-shadow: 0 10px 40px rgba(255, 107, 157, 0.25);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: cardFloat 4s ease-in-out infinite;
+}
+
+.bunny-card:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 15px 50px rgba(255, 107, 157, 0.35);
+}
+
+.bunny-img {
+    width: 280px;
+    height: 280px;
+    object-fit: contain;
+}
+
+.touch-text {
+    font-size: 26px;
+    font-weight: 600;
+    font-style: italic;
+    color: #ff8fb5;
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+/* ===== SCREEN 2: FLOWER SCENE ===== */
+#screen2 {
+    background: #ffe8f0;
+    align-items: center;
+    justify-content: center;
+}
+
+.flower-scene {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 80px;
+}
+
+.scene-title {
+    text-align: center;
+    margin-bottom: 30px;
+    z-index: 5;
+    opacity: 0;
+    animation: titleFadeIn 1s ease forwards;
+}
+
+.title-line1 {
+    display: block;
+    font-family: 'Dancing Script', cursive;
+    font-size: 46px;
+    font-weight: 800;
+    font-style: normal;
+    color: #ff6b9d;
+    text-shadow: 2px 2px 6px rgba(255, 107, 157, 0.25);
+    letter-spacing: 0.5px;
+}
+
+.title-line2 {
+    display: block;
+    font-family: 'Pacifico', cursive;
+    font-size: 50px;
+    font-weight: 800;
+    font-style: normal;
+    color: #ff6b9d;
+    text-shadow: 2px 2px 6px rgba(255, 107, 157, 0.25);
+    margin-top: 5px;
+}
+
+.flower-bouquet {
+    width: 450px;
+    height: 550px;
+    z-index: 3;
+    position: relative;
+    filter: drop-shadow(0 15px 35px rgba(255, 107, 157, 0.25));
+    margin-top: 0;
+}
+
+.bouquet-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    animation: bouquetAppear 1.5s ease-out forwards;
+}
+
+@keyframes bouquetAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.flower-bouquet svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Floating stickers */
+.floating-stickers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+}
+
+.girl-sticker {
+    position: absolute;
+    font-size: 50px;
+    animation: floatSticker 8s ease-in-out infinite;
+    opacity: 0;
+    filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.15));
+}
+
+/* Envelope as Ribbon on Bouquet */
+.envelope-ribbon {
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 140px;
+    height: 95px;
+    z-index: 15;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    opacity: 0;
+}
+
+.envelope-ribbon.show {
+    animation: ribbonPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    opacity: 1;
+}
+
+.envelope-ribbon:hover {
+    transform: translate(-50%, -50%) scale(1.12);
+    filter: brightness(1.08);
+}
+
+.envelope-ribbon svg {
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes ribbonPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+        opacity: 0;
+    }
+
+    60% {
+        transform: translate(-50%, -50%) scale(1.15) rotate(5deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* Envelope Letter positioned on bouquet (như cái nơ buộc) */
+.envelope-letter {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0) rotate(-40deg);
+    width: 100px;
+    height: 75px;
+    z-index: 15;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    filter: drop-shadow(0 6px 20px rgba(255, 107, 157, 0.4));
+}
+
+.envelope-letter.show {
+    animation: letterPop 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s forwards;
+    opacity: 1;
+}
+
+.envelope-letter:hover {
+    transform: translate(-50%, -50%) scale(1.08) rotate(-15deg);
+    filter: drop-shadow(0 8px 25px rgba(255, 107, 157, 0.5)) brightness(1.05);
+}
+
+.letter-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.letter-hint {
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    font-weight: 600;
+    color: #ff6b9d;
+    text-align: center;
+    white-space: nowrap;
+    opacity: 0;
+    animation: hintBounce 2s ease-in-out infinite;
+    text-shadow: 1px 1px 3px rgba(255, 107, 157, 0.3);
+}
+
+.envelope-letter.show .letter-hint {
+    opacity: 1;
+    animation-delay: 1s;
+}
+
+@keyframes hintBounce {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+@keyframes letterPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(-25deg);
+        opacity: 0;
+    }
+
+    60% {
+        transform: translate(-50%, -50%) scale(1.12) rotate(-10deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(-15deg);
+        opacity: 1;
+    }
+}
+
+/* Old envelope styles - hide them */
+.envelope-ribbon,
+.envelope {
+    display: none !important;
+}
+
+.envelope-paper,
+.envelope-body,
+.envelope-flap,
+.letter-peek {
+    display: none;
+}
+
+/* Message Card */
+.message-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: white;
+    border-radius: 25px;
+    padding: 40px 45px;
+    max-width: 500px;
+    width: 88%;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.35);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: auto;
+    cursor: default;
+}
+
+.message-card.show {
+    animation: cardPopUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    opacity: 1;
+}
+
+.card-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 36px;
+    font-weight: 800;
+    font-style: italic;
+    color: #ff6b9d;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.card-text {
+    font-size: 17px;
+    line-height: 1.9;
+    font-weight: 600;
+    color: #ff6b9d;
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+/* Card Navigation */
+.card-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    gap: 15px;
+}
+
+.nav-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Quicksand', sans-serif;
+    color: white;
+    background: linear-gradient(135deg, #ff6b9d, #ff8fb5);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+}
+
+.nav-btn:active {
+    transform: translateY(0);
+}
+
+.nav-btn:disabled {
+    background: linear-gradient(135deg, #ddd, #ccc);
+    cursor: not-allowed;
+    opacity: 0.5;
+    box-shadow: none;
+}
+
+.nav-btn:disabled:hover {
+    transform: none;
+}
+
+.card-counter {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ff6b9d;
+    font-family: 'Quicksand', sans-serif;
+    white-space: nowrap;
+}
+
+/* TikTok Logo */
+.tiktok-logo {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 50;
+    opacity: 0;
+    animation: fadeIn 1s ease 2s forwards;
+}
+
+.tiktok-logo:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+/* ===== SCREEN 3: UNIVERSE ===== */
+#screen3 {
+    background: #000;
+}
+
+#universe {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.universe-hint {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    padding: 18px 40px;
+    border-radius: 50px;
+    z-index: 10;
+}
+
+.universe-hint p {
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.universe-hint em {
+    font-style: italic;
+    font-weight: 600;
+}
+
+/* Surprise Button */
+.surprise-btn-container {
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    z-index: 50;
+    animation: fadeIn 1s ease 2s forwards;
+    opacity: 0;
+}
+
+.surprise-btn {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 18px 35px;
+    background: linear-gradient(135deg, #ff6b9d 0%, #ff8fb5 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+    transition: all 0.3s ease;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.surprise-btn:hover {
+    transform: scale(1.08) translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6);
+    animation: none;
+}
+
+.surprise-btn:active {
+    transform: scale(1.02);
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(255, 107, 157, 0.5);
+    }
+}
+
+/* Photo Detail Card */
+.photo-detail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.photo-detail.show {
+    display: flex;
+    opacity: 1;
+}
+
+.photo-card-wrapper {
+    perspective: 1500px;
+}
+
+.photo-card-inner {
+    position: relative;
+    width: 550px;
+    height: 750px;
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease;
+    cursor: pointer;
+}
+
+.photo-card-inner.flipped {
+    transform: rotateY(180deg);
+}
+
+.photo-front,
+.photo-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+.photo-front {
+    background: white;
+}
+
+.photo-back {
+    background: linear-gradient(135deg, #ff6b9d 0%, #ff8fb5 100%);
+    transform: rotateY(180deg);
+    color: white;
+}
+
+#photoImg {
+    max-width: 100%;
+    max-height: 85%;
+    border-radius: 20px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+    object-fit: cover;
+}
+
+.flip-text {
+    margin-top: 25px;
+    font-size: 19px;
+    font-weight: 600;
+    color: #ff6b9d;
+}
+
+.flip-text em {
+    font-style: italic;
+}
+
+.wish-message {
+    font-family: 'Dancing Script', cursive;
+    font-size: 30px;
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.9;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.back-btn {
+    padding: 15px 40px;
+    font-size: 19px;
+    font-weight: 700;
+    font-style: italic;
+    color: #ff6b9d;
+    background: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes titleFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes cardFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+@keyframes titleFadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes floatSticker {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    25% {
+        transform: translate(30px, -40px) rotate(10deg);
+    }
+
+    50% {
+        transform: translate(-20px, -80px) rotate(-10deg);
+    }
+
+    75% {
+        transform: translate(35px, -50px) rotate(8deg);
+    }
+}
+
+@keyframes envelopePop {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    60% {
+        transform: translate(-50%, -50%) scale(1.2) rotate(5deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes cardPopUp {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5) rotate(-5deg);
+        opacity: 0;
+    }
+
+    70% {
+        transform: translate(-50%, -50%) scale(1.05) rotate(2deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 48px;
+    }
+
+    .bunny-img {
+        width: 220px;
+        height: 220px;
+    }
+
+    .touch-text {
+        font-size: 20px;
+    }
+
+    .title-line1 {
+        font-size: 32px;
+    }
+
+    .title-line2 {
+        font-size: 36px;
+    }
+
+    .flower-bouquet {
+        width: 350px;
+        height: 450px;
+    }
+
+    .message-card {
+        padding: 35px 40px;
+        max-width: 90%;
+    }
+
+    .card-title {
+        font-size: 30px;
+    }
+
+    .card-text {
+        font-size: 15px;
+    }
+
+    .photo-card-inner {
+        width: 90%;
+        height: 650px;
+    }
+
+    .wish-message {
+        font-size: 24px;
+    }
+
+    .surprise-btn-container {
+        top: 20px;
+        right: 20px;
+    }
+
+    .surprise-btn {
+        font-size: 16px;
+        padding: 14px 25px;
+    }
+}
